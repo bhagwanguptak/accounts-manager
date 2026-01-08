@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2019",
     "module": "ESNext",
-    "declaration": false,
+    "declaration": true,
     "declarationMap": false,
 
     "rootDir": "src",
