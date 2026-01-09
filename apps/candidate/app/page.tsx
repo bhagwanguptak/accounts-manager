@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { UserRole } from '@accuhire/shared';
+import { UserRole } from '../../../apps/candidate/src/types';
 import CandidateApp from '../src/CandidateApp';
 import RecruiterApp from '../src/RecruiterApp';
 import AdminApp from '../src/AdminApp';

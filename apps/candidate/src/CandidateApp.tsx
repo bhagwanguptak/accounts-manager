@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { User, UserRole, JobPosting, Application, JobCategory, ApplicationStatus, EmploymentStatus, logger, Navbar, Toast } from '@accuhire/shared';
+import { User, UserRole, JobPosting, Application, JobCategory, ApplicationStatus, EmploymentStatus } from '../../../apps/candidate/src/types';
+import Navbar from '../../../apps/candidate/src/components/Navbar';
+import {logger} from '../../../apps/candidate/src/services/logger';
+import {Toast} from '../../../apps/candidate/src/components/Toast';
 import { CandidateJobsList } from '../../../apps/candidate/src/components/CandidateJobsList';
 import { api } from './api';
 

@@ -9,7 +9,7 @@ import {
   createUser,
 } from '../../../../src/services/database';
 import { mapDbRoleToJwtRole } from '../../../../src/lib/roleHelper';
-import { UserRole } from '@accuhire/shared';
+import { UserRole } from '../../../../src/types';
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'dev_secret'
