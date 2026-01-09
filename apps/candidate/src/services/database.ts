@@ -157,7 +157,7 @@ export function getPool(): Pool {
 
     pool = new Pool({
       connectionString: databaseUrl,
-      ssl: useSSL ? { rejectUnauthorized: false } : false,
+      ssl:{ rejectUnauthorized: false },
     });
   }
 
