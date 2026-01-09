@@ -146,6 +146,7 @@ console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
 export function getPool(): Pool {
   if (!pool) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     const databaseUrl = process.env.DATABASE_URL;
     if (!databaseUrl) {
       throw new Error("DATABASE_URL is not set");
