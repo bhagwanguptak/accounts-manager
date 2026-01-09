@@ -17,7 +17,6 @@ export async function GET(req: NextRequest) {
         { status: 400 }
       );
     }
-    console.log("DATABASE_URL =", process.env.DATABASE_URL);
 
     const user = await getUserByMobile(mobile);
 

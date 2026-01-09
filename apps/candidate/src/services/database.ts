@@ -18,6 +18,8 @@ export const getUserByMobile = async (mobile: string): Promise<User | null> => {
     );
     return result.rows[0] || null;
   } catch (error) {
+    console.error("DATABASE_URL =", process.env.DATABASE_URL);
+
     console.error('[DATABASE] Error getting user by mobile:', error);
     throw error;
   }
