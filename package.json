@@ -6,7 +6,7 @@
   ],
   "scripts": {
    "dev": "next dev -p 3001",
-    "build": "npm run build --workspace=@accuhire/shared && npm run build --workspace=candidate",
+    "build": "echo 'skip root build'",
     "start": "next start -p 3001"
 
   },
