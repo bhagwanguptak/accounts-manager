@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 console.log('[DATABASE] Loading database service file...');
 
 /**
@@ -137,6 +139,8 @@ export const createUserWithPassword = async (user: User, passwordHash: string): 
   }
 };
 let pool: Pool | null = null;
+console.log("RUNTIME:", process.env.NEXT_RUNTIME);
+console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
 export function getPool(): Pool {
   if (!pool) {
