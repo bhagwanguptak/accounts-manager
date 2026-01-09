@@ -6,7 +6,6 @@ import {
   getCandidateProfile,
   updateCandidateProfile,
 } from '../../../../src/services/database';
-import { UserRole } from '@accuhire/shared';
 
 export async function GET(req: NextRequest) {
   try {

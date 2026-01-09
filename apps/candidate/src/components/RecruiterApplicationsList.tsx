@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Application, ApplicationStatus } from "@accuhire/shared";
+import { Application, ApplicationStatus } from "../types";
 import { JobPosting } from "../types";
 import { api } from "../api";
 

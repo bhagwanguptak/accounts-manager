@@ -5,7 +5,7 @@ console.log('[DATABASE] Loading database service file...');
  */
 
 import { Pool, QueryResult } from 'pg';
-import { JobPosting, Application, User, UserRole, ApplicationStatus } from '@accuhire/shared';
+import { JobPosting, Application, User, UserRole, ApplicationStatus } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getUserByMobile = async (mobile: string): Promise<User | null> => {

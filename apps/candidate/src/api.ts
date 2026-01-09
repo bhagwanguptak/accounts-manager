@@ -1,6 +1,6 @@
-import { JobPosting, Application, ApplicationStatus, User } from '@accuhire/shared';
-import { CreateUserInput } from '@accuhire/shared';
-import { ApplyApplicationInput } from '@accuhire/shared';
+import { JobPosting, Application, ApplicationStatus, User } from '../src/types';
+import { CreateUserInput } from '../src/dto/authTypes';
+import { ApplyApplicationInput } from '../src/dto/applicationTypes';
 
 const getHeaders = () => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('accuhire_token') : null;

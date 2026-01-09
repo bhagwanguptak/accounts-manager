@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import * as database from '../src/services/database';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '@accuhire/shared';
+import { User } from '../src/types';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-prod';
 
 export async function POST(req: Request) {

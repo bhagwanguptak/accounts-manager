@@ -3,7 +3,7 @@ dotenv.config();
 
 import { randomUUID } from 'crypto';
 import bcrypt from 'bcryptjs';
-import { UserRole, JobCategory } from '@accuhire/shared';
+import { UserRole, JobCategory } from '../src/types';
 import { 
   initializeDatabase,
   createUserWithPassword,
