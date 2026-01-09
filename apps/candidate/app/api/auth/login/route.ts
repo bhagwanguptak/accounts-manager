@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
-import pool from "../../../../src/services/database"; // adjust path if needed
+import { getPool} from "../../../../src/services/database"; // adjust path if needed
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const normalizedRole = role?.toLowerCase() ?? "candidate";
 
     // ✅ Fetch user by email OR mobile
-    const result = await pool.query(
+    const result = await getPool().query(
       `
       SELECT *
       FROM users

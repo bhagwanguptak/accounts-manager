@@ -1,8 +1,7 @@
 export const dynamic = "force-dynamic";
 import { NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { getOtp, deleteOtp, getUserForLogin } from '../../../../src/services/database';
-import pool from '../../../../src/services/database';
+import { getOtp, deleteOtp, getUserForLogin, getPool } from '../../../../src/services/database';
 
 export async function POST(req: NextRequest) {
   const { identifier, otp, newPassword } = await req.json();
@@ -14,7 +13,7 @@ export async function POST(req: NextRequest) {
 
   const passwordHash = await bcrypt.hash(newPassword, 10);
 
-  await pool.query(
+  await getPool().query(
     `UPDATE users SET password_hash = $1 WHERE mobile = $2 OR email = $2`,
     [passwordHash, identifier]
   );

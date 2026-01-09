@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const getUserByMobile = async (mobile: string): Promise<User | null> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, name, mobile, email, role FROM users WHERE mobile = $1`,
       [mobile]
     );
@@ -23,7 +23,7 @@ export const getUserByMobile = async (mobile: string): Promise<User | null> => {
 
 export const getUserForLogin = async (identifier: string): Promise<any> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, name, mobile, email, role, expertise, experience,
        status AS "employmentStatus",
        password_hash
@@ -40,11 +40,11 @@ export const getUserForLogin = async (identifier: string): Promise<any> => {
 };
 export async function deleteJobById(jobId: string) {
   // 1️⃣ Check if job exists
-  const check = await pool.query(
+  const check = await getPool().query(
     `SELECT id, status FROM jobs WHERE id = $1`,
     [jobId]
   );
-    const dbCheck = await pool.query(
+    const dbCheck = await getPool().query(
     `SELECT current_database(), current_schema()`
   );
   console.log('[DB CHECK]', dbCheck.rows[0]);
@@ -62,7 +62,7 @@ export async function deleteJobById(jobId: string) {
   }
 
   // 2️⃣ Soft delete
-  await pool.query(
+  await getPool().query(
     `
     UPDATE jobs
     SET status = 'DELETED',
@@ -89,7 +89,7 @@ export const createUser = async (user: {
   try {
     const id = uuidv4();
 
-    const result = await pool.query(
+    const result = await getPool().query(
       `
       INSERT INTO users (id, name, mobile, email, role)
       VALUES ($1, $2, $3, $4, $5)
@@ -114,7 +114,7 @@ export const createUser = async (user: {
 
 export const createUserWithPassword = async (user: User, passwordHash: string): Promise<User> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `INSERT INTO users (id, name, mobile, email, role, expertise, experience, status, password_hash)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING id, name, mobile, email, role, expertise, experience, status`,
@@ -159,7 +159,7 @@ export function getPool(): Pool {
 
 
 // Test connection
-pool.on('error', (err) => {
+getPool().on('error', (err) => {
   console.error('[DATABASE ERROR]', err);
 });
 
@@ -173,7 +173,7 @@ export const initializeDatabase = async () => {
 
     // Check connection and existing tables for debugging
     try {
-      const client = await pool.connect();
+      const client = await getPool().connect();
       const dbInfo = await client.query('SELECT current_database(), current_user');
       console.log(`[DATABASE] Connected to '${dbInfo.rows[0].current_database}' as '${dbInfo.rows[0].current_user}'`);
       
@@ -185,7 +185,7 @@ export const initializeDatabase = async () => {
     }
 
     // Create tables if they don't exist
-    await pool.query(`
+    await getPool().query(`
     CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
       CREATE TABLE IF NOT EXISTS users (
@@ -295,7 +295,7 @@ export const createJob = async (
   job: Omit<JobPosting, 'id' | 'createdAt'>
 ): Promise<JobPosting> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `INSERT INTO jobs (
         recruiter_id, title, company, location, category, description, requirements, salary
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -322,7 +322,7 @@ export const createJob = async (
 
 export const getJobById = async (jobId: string): Promise<JobPosting | null> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, recruiter_id as "recruiterId", title, company, location, category,
               description, requirements, salary, created_at as "createdAt"
        FROM jobs WHERE id = $1`,
@@ -337,7 +337,7 @@ export const getJobById = async (jobId: string): Promise<JobPosting | null> => {
 
 export const getJobsByRecruiter = async (recruiterId: string): Promise<JobPosting[]> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, recruiter_id as "recruiterId", title, company, location, category,
               description, requirements, salary, created_at as "createdAt"
        FROM jobs WHERE recruiter_id = $1 ORDER BY created_at DESC`,
@@ -352,7 +352,7 @@ export const getJobsByRecruiter = async (recruiterId: string): Promise<JobPostin
 
 export const getAllJobs = async (): Promise<JobPosting[]> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT *
     FROM jobs
     WHERE status = 'ACTIVE'
@@ -409,7 +409,7 @@ export const updateJob = async (
     fields.push(`updated_at = NOW()`);
     values.push(jobId);
 
-    const result = await pool.query(
+    const result = await getPool().query(
       `UPDATE jobs SET ${fields.join(', ')} WHERE id = $${paramCount}
        RETURNING id, recruiter_id as "recruiterId", title, company, location, category,
                  description, requirements, salary, created_at as "createdAt"`,
@@ -427,13 +427,13 @@ export const updateJob = async (
 export const deleteJob = async (jobId: string): Promise<boolean> => {
   try {
     // Delete associated applications first
-    await pool.query('DELETE FROM applications WHERE job_id = $1', [jobId]);
+    await getPool().query('DELETE FROM applications WHERE job_id = $1', [jobId]);
     
     // Delete associated rejected candidates
-    await pool.query('DELETE FROM rejected_candidates WHERE job_id = $1', [jobId]);
+    await getPool().query('DELETE FROM rejected_candidates WHERE job_id = $1', [jobId]);
     
     // Delete the job
-    const result = await pool.query('DELETE FROM jobs WHERE id = $1 RETURNING id', [jobId]);
+    const result = await getPool().query('DELETE FROM jobs WHERE id = $1 RETURNING id', [jobId]);
     console.log('[DATABASE] Job deleted:', jobId);
     return result.rowCount ? result.rowCount > 0 : false;
   } catch (error) {
@@ -461,7 +461,7 @@ export const createApplication = async (
 ): Promise<Application> => {
   try {
     // 🔹 Fetch candidate details from DB
-  const userRes = await pool.query(
+  const userRes = await getPool().query(
     `SELECT name, mobile, experience FROM users WHERE id = $1`,
     [candidateId]
   );
@@ -475,7 +475,7 @@ export const createApplication = async (
     candidate.name?.trim() ||
     `Candidate-${candidate.mobile?.slice(-4) || "User"}`;
     
-    const result = await pool.query(
+    const result = await getPool().query(
       `INSERT INTO applications (
         job_id,
         candidate_id,
@@ -532,7 +532,7 @@ export const createApplication = async (
 
 export const getApplicationsByJob = async (jobId: string): Promise<Application[]> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, job_id as "jobId", candidate_id as "candidateId", candidate_name as "candidateName",
               candidate_mobile as "candidateMobile", experience, salary_expectation as "salaryExpectation",
               notice_period as "noticePeriod", location, expertise, cover_letter as "coverLetter",
@@ -549,7 +549,7 @@ export const getApplicationsByJob = async (jobId: string): Promise<Application[]
 
 export const getAllApplications = async (): Promise<Application[]> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, job_id as "jobId", candidate_id as "candidateId", candidate_name as "candidateName",
               candidate_mobile as "candidateMobile", experience, salary_expectation as "salaryExpectation",
               notice_period as "noticePeriod", location, expertise, cover_letter as "coverLetter",
@@ -568,7 +568,7 @@ export const updateApplicationStatus = async (
   status: ApplicationStatus
 ): Promise<Application | null> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `UPDATE applications SET status = $1, updated_at = NOW()
        WHERE id = $2
        RETURNING id, job_id as "jobId", candidate_id as "candidateId", candidate_name as "candidateName",
@@ -589,7 +589,7 @@ export const withdrawApplication = async (
   applicationId: string,
   candidateId: string
 ) => {
-  await pool.query(
+  await getPool().query(
     `
     UPDATE applications
     SET is_withdrawn = true,
@@ -611,7 +611,7 @@ export const withdrawApplication = async (
 
 export const getCandidateApplications = async (candidateId: string): Promise<Application[]> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, job_id as "jobId", candidate_id as "candidateId", candidate_name as "candidateName",
               candidate_mobile as "candidateMobile", experience, salary_expectation as "salaryExpectation",
               notice_period as "noticePeriod", location, expertise, cover_letter as "coverLetter",
@@ -627,7 +627,7 @@ export const getCandidateApplications = async (candidateId: string): Promise<App
 };
 
 export const getCandidateProfile = async (userId: string) => {
-  const result = await pool.query(
+  const result = await getPool().query(
     `SELECT id, name, mobile, email, experience, notice_period, preferred_location, expertise
      FROM users WHERE id = $1`,
     [userId]
@@ -645,7 +645,7 @@ export const updateCandidateProfile = async (
     expertise?: string[];
   }
 ) => {
-  const result = await pool.query(
+  const result = await getPool().query(
     `UPDATE users SET
       name = COALESCE(NULLIF($1, ''), name),
       email = COALESCE(NULLIF($2, ''), email),
@@ -681,7 +681,7 @@ export const markCandidateAsRejected = async (
   jobId: string
 ): Promise<boolean> => {
   try {
-    await pool.query(
+    await getPool().query(
       `INSERT INTO rejected_candidates (candidate_id, job_id) VALUES ($1, $2)
        ON CONFLICT (candidate_id, job_id) DO NOTHING`,
       [candidateId, jobId]
@@ -699,7 +699,7 @@ export const isCandidateRejected = async (
   jobId: string
 ): Promise<boolean> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id FROM rejected_candidates WHERE candidate_id = $1 AND job_id = $2`,
       [candidateId, jobId]
     );
@@ -722,12 +722,12 @@ export const createOtp = async (
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
     // Clean up old OTPs
-    await pool.query(
+    await getPool().query(
       'DELETE FROM otps WHERE identifier = $1',
       [identifier]
     );
 
-    await pool.query(
+    await getPool().query(
       `INSERT INTO otps (identifier, code, expires_at)
        VALUES ($1, $2, $3)`,
       [identifier, code, expiresAt]
@@ -746,7 +746,7 @@ export const getOtp = async (
   code: string
 ): Promise<{ id: string; expires_at: Date } | null> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT id, expires_at
        FROM otps
        WHERE identifier = $1 AND code = $2
@@ -764,7 +764,7 @@ export const getOtp = async (
 
 
 export const deleteOtp = async (id: string): Promise<void> => {
-  await pool.query('DELETE FROM otps WHERE id = $1', [id]);
+  await getPool().query('DELETE FROM otps WHERE id = $1', [id]);
 };
 
 /**
@@ -773,7 +773,7 @@ export const deleteOtp = async (id: string): Promise<void> => {
 
 export const getAdminSettings = async (adminId: string): Promise<any> => {
   try {
-    const result = await pool.query(
+    const result = await getPool().query(
       `SELECT * FROM admin_settings WHERE admin_id = $1`,
       [adminId]
     );
@@ -802,7 +802,7 @@ export const updateAdminSettings = async (
       secondaryColor,
     } = settings;
 
-    await pool.query(
+    await getPool().query(
       `
       INSERT INTO admin_settings (
         admin_id,
@@ -878,7 +878,7 @@ export const shouldLoggerBeEnabled = async (adminId: string): Promise<boolean> =
 
 export const closeDatabase = async () => {
   try {
-    await pool.end();
+    await getPool().end();
     console.log('[DATABASE] Connection pool closed');
   } catch (error) {
     console.error('[DATABASE] Error closing connection:', error);
