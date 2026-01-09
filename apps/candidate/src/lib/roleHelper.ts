@@ -1,5 +1,5 @@
 // src/lib/roleHelper.ts
-import { UserRole as DbUserRole } from '@accuhire/shared';
+import { UserRole as DbUserRole } from '../../../candidate/src/types';
 
 export type JwtRole = 'candidate' | 'recruiter' | 'admin';
 
