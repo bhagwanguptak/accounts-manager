@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Application, ApplicationStatus } from "@accuhire/shared";
-import { JobPosting } from "../../../../packages/shared/src/types";
+import { JobPosting } from "../types";
 import { api } from "../api";
 
 interface RecruiterApplicationsListProps {

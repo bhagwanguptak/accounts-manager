@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { JobPosting } from "../../../../packages/shared/src/types";
-import { ViewType } from "../../../../packages/shared/src/types";
+import { JobPosting } from "../types";
+import { ViewType } from "../types";
 import { api } from "../api";
 
 interface RecruiterJobsListProps {

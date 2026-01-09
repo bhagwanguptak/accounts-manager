@@ -138,7 +138,7 @@ export const createUserWithPassword = async (user: User, passwordHash: string): 
 };
 console.log ('DB_HOST:'+ process.env.DB_HOST);
 
-
+const isSSL = process.env.DB_SSL === "true";
 // Initialize PostgreSQL connection pool
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
@@ -146,9 +146,7 @@ const pool = new Pool({
   database: process.env.DB_NAME || 'accuhire_db',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
-  ssl: {
-    rejectUnauthorized: false
-  }
+    ssl: isSSL ? { rejectUnauthorized: false } : false,
   
 });
 

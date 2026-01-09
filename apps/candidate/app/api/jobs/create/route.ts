@@ -1,4 +1,5 @@
 //3.2 Recruiter: Create Job (AUTH REQUIRED)
+export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { createJob } from "../../../../src/services/database";
 import { getAuthUser, requireRole } from "../../../../src/lib/auth";

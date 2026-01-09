@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextRequest } from 'next/server';
 import { getAuthUser } from '../../../../../src/lib/auth';
 import { deleteJobById } from '../../../../../src/services/database';

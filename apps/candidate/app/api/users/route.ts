@@ -1,5 +1,5 @@
 export const runtime = 'nodejs';
-
+export const dynamic = "force-dynamic";
 import { NextRequest } from 'next/server';
 import { getUserByMobile, createUser } from '../../../src/services/database';
 

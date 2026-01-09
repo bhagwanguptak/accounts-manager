@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextResponse } from 'next/server';
 
 import { ensureDbInitialized } from '../../../src/services/dbInit';

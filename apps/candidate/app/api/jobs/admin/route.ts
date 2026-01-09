@@ -1,4 +1,5 @@
 // app/api/jobs/admin/route.ts
+export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { getAllJobs } from "../../../../src/services/database";
 import { getAuthUser, requireRole } from "../../../../src/lib/auth";

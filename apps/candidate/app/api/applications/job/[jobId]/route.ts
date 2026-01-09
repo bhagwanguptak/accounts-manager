@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { getApplicationsByJob } from "../../../../../src/services/database";
 import { getAuthUser, requireRole } from "../../../../../src/lib/auth";

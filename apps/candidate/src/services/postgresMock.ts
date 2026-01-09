@@ -3,7 +3,7 @@ import {
   JobPosting,
   Application,
   ApplicationStatus
-} from '../../../../packages/shared/src/types';
+} from '../types';
 
 let users: User[] = [];
 let jobs: JobPosting[] = [];

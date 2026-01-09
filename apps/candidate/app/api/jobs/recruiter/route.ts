@@ -1,5 +1,5 @@
 //3.3 Recruiter: Get own jobs
-
+export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { getJobsByRecruiter } from "../../../../src/services/database";
 import { getAuthUser, requireRole } from "../../../../src/lib/auth";

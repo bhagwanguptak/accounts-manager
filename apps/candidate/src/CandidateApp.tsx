@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { User, UserRole, JobPosting, Application, JobCategory, ApplicationStatus, EmploymentStatus, logger, Navbar, Toast } from '@accuhire/shared';
-import { CandidateJobsList } from '../../../packages/shared/src/components/CandidateJobsList';
+import { CandidateJobsList } from '../../../apps/candidate/src/components/CandidateJobsList';
 import { api } from './api';
 
 

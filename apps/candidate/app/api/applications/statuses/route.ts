@@ -1,4 +1,5 @@
 // 4.3 Recruiter: Update Application Status
+export const dynamic = "force-dynamic";
 import { NextRequest } from "next/server";
 import { updateApplicationStatus } from "../../../../src/services/database";
 import { getAuthUser, requireRole } from "../../../../src/lib/auth";

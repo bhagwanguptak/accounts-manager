@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { getOtp, deleteOtp, getUserForLogin } from '../../../../src/services/database';

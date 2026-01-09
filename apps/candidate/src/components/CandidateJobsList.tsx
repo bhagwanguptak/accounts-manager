@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { JobPosting, Application } from '@accuhire/shared';
+import { JobPosting, Application } from '../../src/types';
 // import * as database from '../../../../apps/candidate/src/services/database';
 
 interface CandidateJobsListProps {
