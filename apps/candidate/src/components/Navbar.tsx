@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { User } from '@accuhire/shared';
-import { UserRole } from '@accuhire/shared';
+import { User ,UserRole} from '../../src/types';
 export type ViewType = 'dashboard' | 'post' | 'jobs' | 'applications';
 
 interface NavbarProps {
