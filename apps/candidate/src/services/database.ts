@@ -136,6 +136,7 @@ export const createUserWithPassword = async (user: User, passwordHash: string): 
     throw error;
   }
 };
+let pool: Pool | null = null;
 
 export function getPool(): Pool {
   if (!pool) {
