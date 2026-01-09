@@ -138,17 +138,29 @@ export const createUserWithPassword = async (user: User, passwordHash: string): 
 };
 console.log ('DB_HOST:'+ process.env.DB_HOST);
 
-const isSSL = process.env.DB_SSL === "true";
-// Initialize PostgreSQL connection pool
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME || 'accuhire_db',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-    ssl: isSSL ? { rejectUnauthorized: false } : false,
-  
-});
+let pool: Pool | null = null;
+
+export function getPool() {
+  if (!pool) {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+      throw new Error("DATABASE_URL is not set");
+    }
+
+    const useSSL =
+      process.env.DB_SSL === "true" ||
+      process.env.DB_SSL === "1";
+
+    pool = new Pool({
+      connectionString: databaseUrl,
+      ssl: useSSL
+        ? { rejectUnauthorized: false } // Supabase / managed PG
+        : false,                          // local postgres
+    });
+  }
+
+  return pool;
+}
 
 
 // Test connection
