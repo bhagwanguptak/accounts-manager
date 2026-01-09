@@ -136,11 +136,8 @@ export const createUserWithPassword = async (user: User, passwordHash: string): 
     throw error;
   }
 };
-console.log ('DB_HOST:'+ process.env.DB_HOST);
 
-let pool: Pool | null = null;
-
-export function getPool() {
+export function getPool(): Pool {
   if (!pool) {
     const databaseUrl = process.env.DATABASE_URL;
     if (!databaseUrl) {
@@ -153,9 +150,7 @@ export function getPool() {
 
     pool = new Pool({
       connectionString: databaseUrl,
-      ssl: useSSL
-        ? { rejectUnauthorized: false } // Supabase / managed PG
-        : false,                          // local postgres
+      ssl: useSSL ? { rejectUnauthorized: false } : false,
     });
   }
 
